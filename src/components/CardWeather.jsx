@@ -8,7 +8,7 @@ const CardWeather = ({data}) => {
         <Card sx={{minWidth: 275}}>
             <CardContent>
                 <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                    {data.name}, {data.sys.country}
+                    {  data.name ? `${data.name}, ${data.sys.country}` : data['dt_txt']}
                 </Typography>
                 <Typography variant="h5" component="div">
                     <Stack
