@@ -20,7 +20,7 @@ body {
   left: 0;
   top: 0;
   right: 0;
-  bottom: -30px;
+  bottom: -50px;
   filter: blur(5px);
   background-image: url("/src/assets/sky.jpg");
   background-size: cover;

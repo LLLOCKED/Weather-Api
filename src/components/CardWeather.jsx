@@ -23,12 +23,12 @@ const CardWeather = ({data}) => {
                 <Typography>
                     Швидкість вітру, км/год: {data.wind.speed}
                 </Typography>
-                {data.rain ?<Typography>
-                    Кількість опадів за останню годину, мм: {data.rain['1h']}
-                </Typography> : null}
                 <Typography>
                     Хмарність, %: {data.clouds.all}
                 </Typography>
+                {data.rain ?<Typography>
+                    Кількість опадів, мм: {data.rain['1h'] || data.rain['3h']}
+                </Typography> : <Typography>Опадів немає</Typography>}
             </CardContent>
         </Card>
     );
