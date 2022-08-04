@@ -1,6 +1,6 @@
 import {Container, Stack, TextField} from "@mui/material";
 import CardWeather from "./components/CardWeather";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import DaysWeather from "./components/DaysWeather";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
@@ -13,7 +13,7 @@ function App() {
     const [city, setCity] = useState('');
     const [isFind, setFind] = useState(true);
 
-    const weatherApi = async () => {
+    const weatherApi = useCallback(async () => {
         const cityName = city ? `q=${city}&` : '';
         const coordinates = city ? '' : `lon=${location.lon}&lat=${location.lat}`
         try {
@@ -24,9 +24,9 @@ function App() {
             console.log(e)
             setFind(false)
         }
-    };
+    },[city,location]);
 
-    const weatherDaysApi = async () => {
+    const weatherDaysApi = useCallback( async () => {
         const cityName = city ? `q=${city}&` : '';
         const coordinates = city ? '' : `lon=${location.lon}&lat=${location.lat}`
         try {
@@ -35,7 +35,7 @@ function App() {
         } catch (e) {
             console.log(e.response.data.message)
         }
-    };
+    },[city, location]);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -48,7 +48,7 @@ function App() {
     useEffect(() => {
         weatherApi();
         weatherDaysApi();
-    }, [location]);
+    }, [weatherApi, weatherDaysApi]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -64,9 +64,9 @@ function App() {
                    alignItems="center"
                    sx={{height: '100vh'}}
             >
-                <TextField id="outlined-basic" label="Outlined" variant="outlined" value={city}
+                <TextField id="search-city" label="Введіть місто..." variant="outlined" value={city}
                            onChange={e => setCity(e.target.value)} onKeyDown={handleKeyDown}/>
-                {!isFind ? <Typography>Місто не знайдено</Typography> : null }
+                {!isFind ? <Typography>Місто не знайдено</Typography> : null}
                 {weather ? <CardWeather data={weather}/> : null}
             </Stack>
             {daysWeather ? <DaysWeather data={daysWeather}/> : null}
