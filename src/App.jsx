@@ -10,6 +10,7 @@ function App() {
     const [weather, setWeather] = useState();
     const [daysWeather, setDaysWeather] = useState();
     const [location, setLocation] = useState({lon: -0.118092, lat: 51.509865});
+    const [inputCity, setInputCity] = useState('');
     const [city, setCity] = useState('');
     const [isFind, setFind] = useState(true);
 
@@ -24,9 +25,9 @@ function App() {
             console.log(e)
             setFind(false)
         }
-    },[city,location]);
+    }, [city, location]);
 
-    const weatherDaysApi = useCallback( async () => {
+    const weatherDaysApi = useCallback(async () => {
         const cityName = city ? `q=${city}&` : '';
         const coordinates = city ? '' : `lon=${location.lon}&lat=${location.lat}`
         try {
@@ -35,7 +36,7 @@ function App() {
         } catch (e) {
             console.log(e.response.data.message)
         }
-    },[city, location]);
+    }, [city, location]);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -52,8 +53,7 @@ function App() {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            weatherApi();
-            weatherDaysApi();
+            setCity(inputCity);
         }
     }
 
@@ -64,9 +64,9 @@ function App() {
                    alignItems="center"
                    sx={{height: '100vh'}}
             >
-                <TextField id="search-city" label="Введіть місто..." variant="outlined" value={city}
-                           onChange={e => setCity(e.target.value)} onKeyDown={handleKeyDown}/>
-                {!isFind ? <Typography>Місто не знайдено</Typography> : null}
+                <TextField id="search-city" label="Введіть місто..." variant="outlined" value={inputCity}
+                           onChange={e => setInputCity(e.target.value)} onKeyDown={handleKeyDown}/>
+                {!isFind ? <Typography variant="h5" >Місто не знайдено</Typography> : null}
                 {weather ? <CardWeather data={weather}/> : null}
             </Stack>
             {daysWeather ? <DaysWeather data={daysWeather}/> : null}
